@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",()=>{document.querySelectorAll(".ph-brands-nav__item").forEach(e=>{e.addEventListener("click",t=>{const o=e.getAttribute("href"),n=o&&document.querySelector(o);n&&(t.preventDefault(),n.scrollIntoView({behavior:"smooth",block:"start"}))})})});

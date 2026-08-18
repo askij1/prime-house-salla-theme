@@ -1,0 +1,49 @@
+{# ==========================================================================
+   PRIME HOUSE — Footer
+   Registered as {% component 'footer.footer' %}.
+   store.description, store.settings.tax.*, salla-social, salla-menu,
+   salla-contacts, salla-payments, salla-trust-badges are all documented
+   Twilight globals/web components.
+   ========================================================================== #}
+<footer data-testid="store-footer" class="ph-footer">
+  <div class="container">
+    <div class="ph-footer__grid">
+
+      <div class="ph-footer__brand">
+        <a href="{{ link('/') }}" class="ph-wordmark">
+          <img src="{{ store.logo|cdn(140) }}" alt="{{ store.name }}" height="36">
+        </a>
+        {% if store.description %}
+          <div class="ph-footer__desc">{{ store.description|raw }}</div>
+        {% endif %}
+        {% if theme.settings.get('glow_signature_enabled', true) %}
+          <div class="glow-line"></div>
+        {% endif %}
+        <salla-social data-testid="store-footer-social" class="ph-footer__social"></salla-social>
+      </div>
+
+      <div>
+        <h4>{{ trans('blocks.footer.pages_links') }}</h4>
+        <salla-menu data-testid="store-footer-menu" source="footer"></salla-menu>
+      </div>
+
+      <div>
+        <h4>خدمة العملاء</h4>
+        <salla-contacts data-testid="store-footer-contacts"></salla-contacts>
+      </div>
+
+      <div class="ph-footer__trust">
+        <salla-trust-badges data-testid="store-footer-trust-badges" dark></salla-trust-badges>
+        {% if store.settings.tax.number %}
+          <p class="ph-tax-number">{{ trans('common.elements.tax_number') }}: <b>{{ store.settings.tax.number }}</b></p>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+
+  <div class="ph-footer__bottom container">
+    <span class="ph-copyright">{% hook copyright %}</span>
+    <salla-payments data-testid="store-footer-payments"></salla-payments>
+  </div>
+</footer>

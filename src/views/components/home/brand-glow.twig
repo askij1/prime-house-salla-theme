@@ -1,0 +1,21 @@
+{#
+  Custom PRIME HOUSE component, registered in twilight.json "components" as
+  home.brand-glow with editable `heading` / `body` fields (multilanguage
+  text), so the merchant can rewrite the brand story from the Partners
+  Portal without touching code.
+
+| Variable          | Type   |
+|--------------------|--------|
+| component.heading | string |
+| component.body    | string |
+| position          | int    |
+#}
+<section class="ph-brand-glow" id="brand-glow-{{ position }}">
+  <div class="container">
+    {% if theme.settings.get('glow_signature_enabled', true) %}
+      <div class="glow-line"></div>
+    {% endif %}
+    <h2>{{ component.heading|raw }}</h2>
+    <p>{{ component.body|raw }}</p>
+  </div>
+</section>

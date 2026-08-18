@@ -1,0 +1,33 @@
+{#
+  Generic content page template — covers "من نحن", سياسة الشحن, الاستبدال
+  والاسترجاع, الخصوصية, الشروط والأحكام, تواصل معنا, etc. The merchant
+  writes the actual content from the Salla dashboard; this template is only
+  responsible for typography/spacing/containers per the brief (§30).
+
+| Variable     | Type   |
+|---------------|--------|
+| page.title   | string |
+| page.content | string | HTML, written by the merchant |
+| page.type    | string | 'customised' pages render freely via hooks instead |
+#}
+{% extends "layouts.master" %}
+
+{% block content %}
+  {% if page.type == 'customised' %}
+    <div class="s-blocks-wrapper">{% hook 'information_page.information_page' %}</div>
+  {% else %}
+    <div class="container ph-content-page">
+      <div class="ph-breadcrumb-wrap">
+        <salla-breadcrumb></salla-breadcrumb>
+      </div>
+
+      <div class="ph-content-page__card">
+        <h1>{{ page.title }}</h1>
+        <div class="ph-prose">
+          {{ page.content|raw }}
+        </div>
+        <salla-comments data-testid="store-page-comments" item-id="{{ page.id }}" type="page"></salla-comments>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

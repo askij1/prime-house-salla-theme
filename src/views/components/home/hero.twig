@@ -1,0 +1,41 @@
+{# ==========================================================================
+   PRIME HOUSE — Hero (fixed brand moment, included directly in pages/index.twig
+   before {% component home %} — not a removable Theme Feature, since the
+   brief calls for a hero that always represents the brand).
+
+   All copy/CTA/image come from theme.settings (twilight.json "settings"),
+   set via theme.settings.get(id, default) — the official pattern.
+   No emoji. If no hero_image is set by the merchant yet, falls back to a
+   configurable placeholder asset instead of an emoji or invented image.
+   ========================================================================== #}
+<section class="ph-hero">
+  <div class="container ph-hero__grid">
+
+    <div class="ph-hero__copy">
+      <span class="eyebrow">{{ theme.settings.get('hero_eyebrow', 'Prime Performance Nutrition') }}</span>
+      <h1>{{ theme.settings.get('hero_title', 'جسدك يستحق أداءً بلا حدود')|raw }}</h1>
+      <p class="ph-hero__lede">{{ theme.settings.get('hero_subtitle', '')|raw }}</p>
+
+      <div class="ph-hero__cta">
+        <a href="{{ theme.settings.get('hero_cta_url', '/categories') }}" class="btn btn-primary">
+          {{ theme.settings.get('hero_cta_label', 'تسوّق الآن') }}
+        </a>
+        {% if theme.settings.get('hero_secondary_cta_label') %}
+          <a href="{{ theme.settings.get('hero_secondary_cta_url', '/offers') }}" class="btn btn-outline">
+            {{ theme.settings.get('hero_secondary_cta_label') }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="ph-hero__visual">
+      <div class="ph-hero__glow-beam" aria-hidden="true"></div>
+      <img
+        src="{{ theme.settings.get('hero_image') ? theme.settings.get('hero_image')|cdn : 'images/hero-placeholder.jpg'|asset }}"
+        alt="{{ store.name }}"
+        loading="eager"
+        fetchpriority="high">
+    </div>
+
+  </div>
+</section>

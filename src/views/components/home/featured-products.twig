@@ -1,0 +1,54 @@
+{#
+  Theme Feature: "component-featured-products" (declared in twilight.json
+  "features"). Salla's Partners Portal provides the merchant-facing config
+  UI for this feature (which products/category feed each tab uses) — the
+  theme only needs to render the resolved data below.
+
+| Variable                 | Type      | Description                                                          |
+|---------------------------|-----------|-----------------------------------------------------------------------|
+| items                    | array     | One or more tabs                                                     |
+| items[].title            | string    | Tab / section title                                                   |
+| items[].type             | string    | category, most_sales, latest_products, chosen_products                |
+| items[].products[]       | Product[] |                                                                        |
+| items[].limit            | int       | Number of products to show                                            |
+| position                 | int       | Sorting position among home components                                |
+
+  Grounded in Theme Raed's featured-products-style1.twig variable table.
+  Product cards use the OFFICIAL <salla-product-card> web component
+  (https://docs.salla.dev/422718m0) — not a custom re-implementation —
+  so cart/wishlist/price/stock behaviour always matches Salla's own logic.
+#}
+<section class="container ph-section" id="featured-products-{{ position }}">
+  <div class="section-title">
+    <span class="eyebrow">مختارات المتجر</span>
+    <h2>{{ items[0].title|default('الأكثر طلبًا') }}</h2>
+    {% if theme.settings.get('glow_signature_enabled', true) %}
+      <div class="glow-line"></div>
+    {% endif %}
+  </div>
+
+  {% if items|length > 1 %}
+    <div class="ph-tabs" role="tablist">
+      {% for section in items %}
+        <salla-button shape="link" data-target="ph-featured-{{ position }}-{{ loop.index0 }}"
+                      class="ph-tab-trigger {{ loop.first ? 'is-active' : '' }}">
+          {{ section.title }}
+        </salla-button>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% for section in items %}
+    <div id="ph-featured-{{ position }}-{{ loop.index0 }}" class="product-grid {{ loop.first ? '' : 'hidden' }}">
+      {% for product in section.products|slice(0, section.limit|default(8)) %}
+        <div class="ph-product-card-slot">
+          <salla-product-card product="{{ product }}" shadow-on-hover></salla-product-card>
+        </div>
+      {% else %}
+        <div class="ph-empty-state">
+          <p>{{ trans('pages.categories.no_products') }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</section>

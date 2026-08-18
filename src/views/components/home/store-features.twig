@@ -1,0 +1,25 @@
+{#
+  Theme Feature: "component-store-features" — this is Salla's real,
+  documented "trust section" mechanism. Merchant edits the icon/title/text
+  of each item from the Partners Portal, so PRIME HOUSE never hardcodes
+  claims like "شحن سريع" as fixed copy — exactly as the brief requires.
+
+| Variable      | Type   | Description               |
+|----------------|--------|----------------------------|
+| items[]       | array  | List of features (merchant-defined) |
+| items[].icon  | string | SallaIcons class `sicon-*` |
+| items[].title | string |                            |
+| items[].text  | string |                            |
+| position      | int    |                            |
+#}
+<section class="container ph-trust" id="store-features-{{ position }}">
+  <div class="ph-trust__grid">
+    {% for item in items %}
+      <div class="ph-trust__item">
+        <div class="ph-trust__icon"><i class="{{ item.icon }}"></i></div>
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.text }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</section>

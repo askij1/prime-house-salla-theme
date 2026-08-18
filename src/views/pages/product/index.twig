@@ -1,0 +1,95 @@
+{#
+  Products Listing page. Per Twilight docs (docs.salla.dev/422559m0) this
+  ONE template renders four cases based on `page.slug`: category browsing,
+  offers, tag pages, and search results — Salla resolves which case it is;
+  the theme only needs to render `products`/`page.title`/`sort_options`.
+
+| Variable       | Type       | Description                                                          |
+|-----------------|------------|------------------------------------------------------------------------|
+| page            | object     |                                                                        |
+| page.title      | string     | *may contain HTML                                                     |
+| page.slug       | string     | ex: "cat.show"                                                        |
+| category        | ?Category  | present on category pages                                             |
+| filters         | bool       | whether the filters sidebar should render here                        |
+| sort_options[]  | SortList[] | ourSuggest, bestSell, topRated, priceFromTopToLow, priceFromLowToTop   |
+| search_query    | ?string    | present on search-result pages                                        |
+#}
+{% extends "layouts.master" %}
+
+{% block content %}
+
+  {# Breadcrumb visibility is controlled by the "breadcrumb" Theme Feature
+     (declared in twilight.json) via the Partners Portal, not a custom
+     setting invented here. #}
+  <div class="container ph-breadcrumb-wrap">
+    <salla-breadcrumb></salla-breadcrumb>
+  </div>
+
+  {% hook 'product.index.before_products_group_with_filter' %}
+
+  {% if category and category.image %}
+    <div class="ph-category-banner">
+      <img src="{{ category.image|cdn }}" alt="{{ category.name }}" loading="eager">
+    </div>
+  {% endif %}
+
+  <div class="container ph-listing">
+    {% if filters %}
+      <button class="ph-filters-close sicon-cancel hidden" aria-label="إغلاق الفلاتر"></button>
+      <salla-filters data-testid="store-products-filters" id="filters-menu" class="ph-filters-sidebar"></salla-filters>
+    {% endif %}
+
+    <div class="ph-listing__main">
+      <div class="ph-listing__head">
+        <h1 id="page-main-title">{{ page.title|raw }}</h1>
+
+        <div class="ph-listing__controls">
+          {% if filters %}
+            <a href="#filters-menu" class="ph-filters-trigger lg:hidden">
+              <i class="sicon-filter"></i> فلاتر
+            </a>
+          {% endif %}
+
+          {% if sort_options|length %}
+            <div class="ph-sort">
+              <label for="product-filter">{{ trans('pages.categories.sorting') }}</label>
+              <select id="product-filter" class="ph-select">
+                {% for sort in sort_options %}
+                  <option value="{{ sort.id }}" {{ sort.is_selected ? 'selected' : '' }}>{{ sort.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      {% hook 'product:index.items.start' %}
+
+      {# <salla-products-list> is the official, documented listing component
+         (docs.salla.dev/422719m0). It fetches, paginates and renders
+         products itself — including calling <salla-product-card> per item —
+         so PRIME HOUSE styles it entirely through --color-primary / --s-radius
+         rather than re-implementing pagination/infinite-scroll logic. #}
+      <salla-products-list
+        data-testid="store-products-list"
+        class="ph-products-list"
+        source="{{ page.slug }}"
+        source-value="{{ page.id }}"
+        {{ filters ? 'filters-results' : '' }}>
+      </salla-products-list>
+
+      {% hook 'product:index.items.end' %}
+    </div>
+  </div>
+
+  {% hook 'product.index.after_products_group_with_filter' %}
+
+  {% if store.settings.category.testimonial_enabled %}
+    {% component 'home.testimonials' %}
+  {% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+  <script defer src="{{ 'product.js' | asset }}"></script>
+{% endblock %}

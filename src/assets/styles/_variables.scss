@@ -1,0 +1,71 @@
+/* =========================================================================
+   PRIME HOUSE — Design Tokens
+
+   Two layers, on purpose:
+
+   1) --ph-*        Our own brand tokens (source of truth for the brand).
+   2) --color-*, --font-main
+                     Salla's OFFICIAL Twilight CSS variables. Every Twilight
+                     web component (salla-button, salla-product-card,
+                     salla-add-product-button, price highlights, active
+                     states, etc.) reads these — NOT our --ph-* names.
+                     See: https://docs.salla.dev/421945m0
+
+   These official variables are assigned dynamically in master.twig from
+   `theme.color.*` / `theme.font.*` (which come from the "color" and "fonts"
+   twilight.json features, so the merchant CAN override them from the
+   Partners Portal). The values below are only the PRIME HOUSE *defaults*
+   PRIME HOUSE ships with.
+   ========================================================================= */
+
+:root {
+  /* ---- Brand core (PRIME HOUSE tokens) ---- */
+  --ph-black:        #0A0A0B;
+  --ph-black-soft:   #141416;
+  --ph-black-softer: #1C1C1F;
+  --ph-gold:         #F2B705;
+  --ph-gold-dim:     #B98D00;
+  --ph-white:        #F5F4F0;
+  --ph-text-muted:   #9A9AA1;
+  --ph-border:       #262629;
+  --ph-success:      #34C77B;
+  --ph-error:        #E5484D;
+  --ph-sale:         #FF5A36; /* deliberately NOT gold — see DESIGN-BRIEF.md */
+
+  /* ---- Typography roles ---- */
+  --font-display-ar: 'Alexandria', 'Tajawal', sans-serif;
+  --font-body-ar:    'IBM Plex Sans Arabic', 'Tajawal', sans-serif;
+  --font-display-en: 'Anton', 'Oswald', sans-serif;
+  --font-body-en:    'Inter', sans-serif;
+
+  --fs-hero: clamp(2.25rem, 5vw, 4.25rem);
+  --fs-h1:   clamp(1.75rem, 3vw, 2.75rem);
+  --fs-h2:   clamp(1.375rem, 2.2vw, 2rem);
+
+  /* ---- Spacing / radius / shadow ---- */
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+  --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px; --space-9: 96px;
+
+  --s-radius: 12px;          /* mirrors Salla's own --s-radius convention */
+  --radius-sm: 6px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  --shadow-card:      0 4px 20px rgba(0,0,0,.45);
+  --shadow-gold-glow: 0 0 24px rgba(242,183,5,.35);
+
+  /* ---- The signature Glow Line gradient ---- */
+  --glow-gradient: linear-gradient(90deg, transparent 0%, var(--ph-gold) 25%, #FFE38A 50%, var(--ph-gold) 75%, transparent 100%);
+
+  --container-max: 1320px;
+  --header-h: 84px;
+
+  /* -------------------------------------------------------------------
+     NOTE: --color-primary / --color-primary-dark / --color-primary-light /
+     --color-primary-reverse / --font-main are NOT set here. They are set
+     in layouts/master.twig from theme.color.primary / theme.font.name —
+     the official mechanism (see CSS Variables doc) — using --ph-gold as
+     the PRIME HOUSE default primary color and --ph-black as the reverse
+     (text-on-gold) color.
+     ------------------------------------------------------------------- */
+}

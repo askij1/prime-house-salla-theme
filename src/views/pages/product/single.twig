@@ -1,0 +1,197 @@
+{#
+  Single Product page. Full variable table confirmed against Twilight's
+  documented Product object (docs.salla.dev/422561m0) — only the fields
+  PRIME HOUSE actually renders are listed here; see the docs for the rest.
+
+| Variable                | Type     | Description                                    |
+|---------------------------|----------|-------------------------------------------------|
+| product.name              | string   |                                                  |
+| product.subtitle          | ?string  |                                                  |
+| product.brand             | ?object  | id, url, name, logo                             |
+| product.rating            | ?object  | stars, count                                    |
+| product.is_on_sale        | bool     |                                                  |
+| product.sale_price        | float    |                                                  |
+| product.regular_price     | float    |                                                  |
+| product.price             | float    |                                                  |
+| product.starting_price    | ?float   |                                                  |
+| product.is_taxable        | bool     |                                                  |
+| product.description       | string   | HTML                                             |
+| product.images[]          | array    | id, url, alt                                     |
+| product.options           | array    | rendered via pages/partials/product/options.twig |
+| product.sku               | ?string  |                                                  |
+| product.max_quantity      | int      |                                                  |
+| product.is_hidden_quantity| bool     |                                                  |
+| product.status            | string   | sale, out, out-and-notify                        |
+| product.type              | string   | product, service, digital, food, donating…       |
+| product.add_to_cart_label | string   |                                                  |
+| product.base_currency_price| float   |                                                  |
+| product.is_require_shipping| bool    |                                                  |
+#}
+{% extends "layouts.master" %}
+
+{% block content %}
+
+  {# Breadcrumb visibility itself is controlled by the "breadcrumb" Theme
+     Feature (declared in twilight.json), configured from the Partners
+     Portal — not a custom setting we invent here. #}
+  <div class="container ph-breadcrumb-wrap">
+    <salla-breadcrumb></salla-breadcrumb>
+  </div>
+
+  {% hook 'product.single.before_product_info' %}
+
+  <div class="container ph-product">
+    <div class="ph-product__grid" id="product-{{ product.id }}">
+
+      {# ---- Gallery ---- #}
+      <div class="ph-product__gallery">
+        <salla-slider
+          data-testid="store-product-image-slider"
+          id="details-slider-{{ product.id }}"
+          class="ph-gallery-slider"
+          type="thumbs"
+          loop="false"
+          auto-height
+          listen-to-thumbnails-option>
+
+          {% if product.promotion_title %}
+            <div class="ph-badge ph-badge--sale">{{ product.promotion_title }}</div>
+          {% endif %}
+
+          <salla-button class="ph-wishlist-btn" data-id="{{ product.id }}"
+                        onclick="salla.wishlist.toggle('{{ product.id }}')"
+                        shape="icon" fill="outline" color="light" aria-label="أضف للمفضلة">
+            <i class="sicon-heart"></i>
+          </salla-button>
+
+          <div slot="items">
+            {% for image in product.images %}
+              <a data-fslightbox="product_{{ product.id }}" href="{{ image.url }}"
+                 aria-label="{{ product.name }}" class="swiper-slide ph-gallery-slide">
+                <img src="{{ image.url }}" alt="{{ image.alt|default(product.name) }}"
+                     loading="{{ loop.first ? 'eager' : 'lazy' }}">
+              </a>
+            {% endfor %}
+          </div>
+
+          {% if product.images|length > 1 %}
+            <div slot="thumbs">
+              {% for image in product.images %}
+                <div class="ph-gallery-thumb">
+                  <img src="{{ image.url }}" alt="{{ image.alt|default(product.name) }}" loading="lazy">
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </salla-slider>
+      </div>
+
+      {# ---- Info / add to cart ---- #}
+      <div class="ph-product__info">
+        {% hook 'product:single.description.start' %}
+
+        {% if product.brand.name %}
+          <a href="{{ product.brand.url }}" class="ph-product__brand">
+            <img src="{{ product.brand.logo }}" alt="{{ product.brand.name }}">
+          </a>
+        {% endif %}
+
+        <h1 data-testid="store-product-title" class="ph-product__title">{{ product.name }}</h1>
+        {% if product.subtitle %}<p class="ph-product__subtitle">{{ product.subtitle }}</p>{% endif %}
+
+        {% if product.rating %}
+          <salla-rating-stars data-testid="store-product-rating" value="{{ product.rating.stars }}"
+                               reviews="{{ product.rating.count }}"></salla-rating-stars>
+        {% endif %}
+
+        <div class="ph-product__price" data-testid="store-product-price">
+          {% if product.is_on_sale %}
+            <span class="now">{{ product.sale_price|money }}</span>
+            <span class="was">{{ product.regular_price|money }}</span>
+          {% else %}
+            {% if product.starting_price %}<span class="from">{{ trans('pages.products.starting_price') }}</span>{% endif %}
+            <span class="now">{{ product.starting_price ? product.starting_price|money : product.price|money }}</span>
+          {% endif %}
+          {% if product.is_taxable %}<small class="ph-tax-note">{{ trans('pages.products.tax_included') }}</small>{% endif %}
+        </div>
+
+        <div class="ph-product__desc" data-testid="store-product-description">{{ product.description|raw }}</div>
+
+        <div class="ph-product__actions-row">
+          <salla-social-share data-testid="store-product-social-share"></salla-social-share>
+          <salla-button data-testid="store-product-wishlist-btn" data-id="{{ product.id }}"
+                        onclick="salla.wishlist.toggle('{{ product.id }}')"
+                        shape="icon" fill="outline" color="light" aria-label="أضف للمفضلة">
+            <i class="sicon-heart"></i>
+          </salla-button>
+        </div>
+
+        {% if product.sku %}
+          <div class="ph-product__sku"><i class="sicon-barcode"></i> {{ trans('pages.products.sku') }}: {{ product.sku }}</div>
+        {% endif %}
+
+        {% hook 'product:single.description' %}
+
+        <salla-installment data-testid="store-product-installment" price="{{ product.price }}"></salla-installment>
+        {% if product.has_metadata %}<salla-metadata data-testid="store-product-metadata"></salla-metadata>{% endif %}
+
+        <form data-testid="store-product-form" class="ph-product__form" enctype="multipart/form-data" method="post"
+              onsubmit="return salla.form.onSubmit('cart.addItem', event)">
+          <input type="hidden" name="id" value="{{ product.id }}">
+
+          {% hook 'product:single.form.start' %}
+          {% include 'pages.partials.product.options' %}
+          {% hook 'product:single.form.end' %}
+
+          <div class="ph-product__qty-row">
+            {% if product.is_hidden_quantity or product.type == 'booking' %}
+              <input type="hidden" value="1" name="quantity" aria-label="Quantity">
+            {% else %}
+              <label class="ph-form-label">{{ trans('pages.products.quantity') }}</label>
+              <salla-quantity-input data-testid="store-product-quantity" max="{{ product.max_quantity }}"
+                                     value="1" name="quantity" aria-label="Quantity"></salla-quantity-input>
+            {% endif %}
+          </div>
+
+          <salla-add-product-button
+            data-testid="store-product-add-to-cart"
+            {{ product.can_quick_buy ? 'quick-buy' : '' }}
+            {{ product.is_require_shipping ? 'required-shipping' : '' }}
+            amount="{{ product.base_currency_price }}"
+            class="btn btn-primary ph-add-to-cart"
+            product-status="{{ product.status }}"
+            product-type="{{ product.type }}"
+            product-id="{{ product.id }}"
+            loader-position="end"
+            type="submit"
+            width="wide">
+            {{ product.add_to_cart_label }}
+          </salla-add-product-button>
+        </form>
+
+        {% hook 'product:single.description.end' %}
+      </div>
+    </div>
+
+    <salla-offer data-testid="store-product-offer"></salla-offer>
+  </div>
+
+  {% hook 'product.single.before_customer_reviews' %}
+
+  {% if store.settings.rating.show_on_product %}
+    <salla-comments data-testid="store-product-comments" item-id="{{ product.id }}" type="product"></salla-comments>
+  {% endif %}
+
+  {% hook 'product.single.before_product_recommendations' %}
+
+  <div class="container ph-related">
+    <salla-products-slider data-testid="store-product-related" source="related" source-value="{{ product.id }}"
+                            block-title="{{ trans('pages.products.similar_products') }}" display-all-url></salla-products-slider>
+  </div>
+
+  {% hook 'product.single.after_product_recommendations' %}
+{% endblock %}
+
+{% block scripts %}
+  <script defer src="{{ 'product.js' | asset }}"></script>
+{% endblock %}

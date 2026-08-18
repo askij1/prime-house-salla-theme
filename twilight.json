@@ -1,0 +1,157 @@
+{
+  "name": "Prime House",
+  "description": "Premium Fitness & Sports Nutrition digital identity for PRIME HOUSE — a Salla Twilight theme built from the brand's original black/gold storefront identity.",
+  "repository": "https://github.com/YOUR_GITHUB_ORG/prime-house-theme",
+  "author_email": "dev@primehouse.sa",
+  "support_url": "https://primehouse.sa/support",
+
+  "features": [
+    "color",
+    "fonts",
+    "breadcrumb",
+    "filters",
+    "component-featured-products",
+    "component-store-features",
+    "component-testimonials"
+  ],
+
+  "components": [
+    {
+      "key": "ph-category-rail",
+      "title": { "en": "Category Rail (Glow)", "ar": "شريط الفئات (Glow)" },
+      "icon": "sicon-layout-grid-rearrange",
+      "path": "home.category-rail",
+      "is_default": true,
+      "fields": [
+        {
+          "type": "string",
+          "format": "text",
+          "id": "title",
+          "label": "عنوان القسم",
+          "multilanguage": true,
+          "value": null,
+          "required": false,
+          "placeholder": "تسوّق حسب الفئة"
+        },
+        {
+          "id": "categories",
+          "type": "items",
+          "format": "dropdown-list",
+          "label": "حدد التصنيفات المعروضة",
+          "source": "categories",
+          "multichoice": true,
+          "searchable": true,
+          "selected": [],
+          "options": [],
+          "required": false
+        }
+      ]
+    },
+    {
+      "key": "ph-brand-story",
+      "title": { "en": "Brand Story (Glow Line)", "ar": "قصة العلامة (خط التوهج)" },
+      "icon": "sicon-star",
+      "path": "home.brand-glow",
+      "is_default": true,
+      "fields": [
+        {
+          "type": "string",
+          "format": "text",
+          "id": "heading",
+          "label": "العنوان",
+          "multilanguage": true,
+          "value": "من محل تحت الأضواء… إلى علامة بلا حدود",
+          "required": false
+        },
+        {
+          "type": "string",
+          "format": "textarea",
+          "id": "body",
+          "label": "النص",
+          "multilanguage": true,
+          "value": "PRIME HOUSE بدأت كواجهة واحدة تضيء بالذهبي في الليل. اليوم، نفس الإصرار يقف خلف كل عبوة بروتين وكل مكمل نقدمه لك.",
+          "required": false
+        }
+      ]
+    }
+  ],
+
+  "settings": [
+    {
+      "type": "string",
+      "format": "text",
+      "id": "hero_eyebrow",
+      "label": "الحرف الصغير أعلى العنوان (Hero Eyebrow)",
+      "multilanguage": true,
+      "value": "Prime Performance Nutrition"
+    },
+    {
+      "type": "string",
+      "format": "text",
+      "id": "hero_title",
+      "label": "عنوان الـ Hero",
+      "multilanguage": true,
+      "value": "جسدك يستحق أداءً بلا حدود"
+    },
+    {
+      "type": "string",
+      "format": "textarea",
+      "id": "hero_subtitle",
+      "label": "الوصف تحت العنوان",
+      "multilanguage": true,
+      "value": "مكملات غذائية ومستلزمات رياضية مختارة بعناية لمن لا يقبل بالمتوسط."
+    },
+    {
+      "type": "string",
+      "format": "text",
+      "id": "hero_cta_label",
+      "label": "نص زر الـ CTA الأساسي",
+      "multilanguage": true,
+      "value": "تسوّق الآن"
+    },
+    {
+      "type": "string",
+      "format": "text",
+      "id": "hero_cta_url",
+      "label": "رابط زر الـ CTA الأساسي",
+      "value": "/categories"
+    },
+    {
+      "type": "string",
+      "format": "text",
+      "id": "hero_secondary_cta_label",
+      "label": "نص الزر الثانوي",
+      "multilanguage": true,
+      "value": "الأكثر مبيعًا"
+    },
+    {
+      "type": "string",
+      "format": "text",
+      "id": "hero_secondary_cta_url",
+      "label": "رابط الزر الثانوي",
+      "value": "/offers"
+    },
+    {
+      "type": "image",
+      "format": "image",
+      "id": "hero_image",
+      "label": "صورة الـ Hero (منتج / رياضي)",
+      "value": null
+    },
+    {
+      "type": "boolean",
+      "format": "switch",
+      "id": "glow_signature_enabled",
+      "label": "تفعيل خط التوهج (Glow Line) في كل الموقع",
+      "description": "العنصر البصري المميز لـ PRIME HOUSE، مستوحى من توهج لافتة المحل",
+      "value": true
+    },
+    {
+      "type": "boolean",
+      "format": "switch",
+      "id": "topnav_is_dark",
+      "label": "الشريط العلوي داكن",
+      "value": true
+    }
+  ]
+}

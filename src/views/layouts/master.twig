@@ -1,0 +1,82 @@
+{# ==========================================================================
+   PRIME HOUSE — Master Layout
+   Pattern grounded in Salla's official Theme Raed master.twig:
+   https://github.com/SallaApp/theme-raed/blob/master/src/views/layouts/master.twig
+   All variables below (store.*, theme.*, page.*) are Twilight's documented
+   global variables — see https://docs.salla.dev/421938m0
+   ========================================================================== #}
+<!DOCTYPE html>
+<html lang="{{ language.code }}" dir="{{ theme.is_rtl ? 'rtl' : 'ltr' }}">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ page.title|default(store.name) }}{% endblock %}</title>
+
+  {{ theme.settings.set('placeholder', 'images/placeholder.png') }}
+
+  {% block head_scripts %}{% endblock %}
+
+  {% hook 'head:start' %}
+  {% hook head %}
+  {% block styles %}{% endblock %}
+
+  <link rel="stylesheet" href="{{ 'app.css' | asset }}">
+  {% if theme.font %}
+    <link rel="stylesheet" href="{{ theme.font.path|default(theme.font.url)|cdn }}">
+  {% endif %}
+  <link rel="stylesheet" href="{{ 'fonts/sallaicons.css'|cdn }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;600;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Anton&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  {#
+    Official Twilight CSS variable contract (docs.salla.dev/421945m0).
+    theme.color.* comes from the "color" feature in twilight.json, so the
+    merchant can override PRIME HOUSE's gold from the Partners Portal if
+    they ever need to. --ph-gold is only the shipped DEFAULT.
+  #}
+  <style>
+    :root {
+      --font-main: '{{ theme.font.name|default('Alexandria') }}';
+      --color-primary: {{ theme.color.primary|default('#F2B705') }};
+      --color-primary-dark: {{ theme.color ? theme.color.darker(0.15) : '#B98D00' }};
+      --color-primary-light: {{ theme.color ? theme.color.lighter(0.15) : '#F7CB4D' }};
+      --color-primary-reverse: {{ theme.color ? theme.color.reverse_text : '#0A0A0B' }};
+    }
+  </style>
+
+  {% hook 'head:end' %}
+</head>
+<body id="app" class="ph-theme{{ theme.settings.get('topnav_is_dark') ? ' topnav-is-dark' : '' }}">
+
+<noscript>
+  لتصفح PRIME HOUSE بكامل الميزات يرجى تفعيل JavaScript في المتصفح.
+</noscript>
+
+<div class="app-inner">
+  {% hook 'body:start' %}
+
+  {% component 'header.header' %}
+
+  <main id="main-content" role="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% component 'footer.footer' %}
+
+  {% hook 'body:end' %}
+</div>
+
+<script defer crossorigin="anonymous" src="{{ 'app.js' | asset }}"></script>
+
+{# Twilight global modals/components used across all pages #}
+<salla-search data-testid="store-search-modal"></salla-search>
+<salla-login-modal data-testid="store-login-modal"></salla-login-modal>
+<salla-offer-modal data-testid="store-offer-modal"></salla-offer-modal>
+{% if store.scope %}
+  <salla-scopes data-testid="store-scopes" selection="{{ store.scope.display_as == 'popup' ? 'mandatory' : 'optional' }}"></salla-scopes>
+{% endif %}
+
+{% block scripts %}{% endblock %}
+</body>
+</html>

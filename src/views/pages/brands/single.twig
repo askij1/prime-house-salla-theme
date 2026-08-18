@@ -1,0 +1,46 @@
+{#
+| Variable            | Type    | Description |
+|----------------------|---------|--------------|
+| brand.name           | string  |              |
+| brand.logo           | string  |              |
+| brand.banner         | ?string | may be null  |
+| brand.description    | string  | HTML         |
+| products              | array   |              |
+#}
+{% extends "layouts.master" %}
+
+{% block content %}
+
+  {% if brand.banner %}
+    <div class="ph-brand-banner">
+      <img src="{{ brand.banner }}" alt="{{ brand.name }}" loading="eager">
+    </div>
+  {% endif %}
+
+  <div class="container">
+    <div class="ph-breadcrumb-wrap">
+      <salla-breadcrumb></salla-breadcrumb>
+    </div>
+
+    {% hook 'brands:single.details.start' %}
+    <header class="ph-brand-header">
+      <img src="{{ brand.logo }}" alt="{{ brand.name }}" loading="lazy">
+      <div>
+        <h1>{{ brand.name }}</h1>
+        {% if brand.description %}<p>{{ brand.description|raw }}</p>{% endif %}
+      </div>
+    </header>
+    {% hook 'brands:single.details.end' %}
+
+    {% if products|length %}
+      {% hook 'brands:single.items.start' %}
+      <salla-products-list data-testid="store-brand-products" source="{{ page.slug }}" source-value="{{ page.id }}"></salla-products-list>
+      {% hook 'brands:single.items.end' %}
+    {% else %}
+      <div class="ph-empty-state">
+        <i class="sicon-award-ribbon"></i>
+        <p>{{ trans('pages.brands.non_products') }} {{ brand.name }}</p>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

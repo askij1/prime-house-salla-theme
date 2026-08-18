@@ -1,0 +1,41 @@
+{#
+| Variable            | Type    | Description                                                              |
+|---------------------|---------|---------------------------------------------------------------------------|
+| component           | object  | Merchant settings for this component's `fields`, defined in twilight.json |
+| component.title     | ?string |                                                                            |
+| component.categories| Category[] | Resolved from the `categories` source picker — merchant-selected      |
+| position            | int     | Sorting position among home components                                   |
+
+Pattern grounded in Theme Raed's "Main Links" component, which resolves a
+`source: "categories"` field into real Category objects (cat.name, cat.url,
+cat.image): https://github.com/SallaApp/theme-raed (home/main-links.twig)
+#}
+<section class="container ph-section" id="category-rail-{{ position }}">
+  <div class="section-title">
+    <span class="eyebrow">تسوّق حسب الفئة</span>
+    <h2>{{ component.title|default('كل ما يحتاجه أداؤك') }}</h2>
+    {% if theme.settings.get('glow_signature_enabled', true) %}
+      <div class="glow-line"></div>
+    {% endif %}
+  </div>
+
+  {% if component.categories|length %}
+    <salla-slider type="carousel" show-controls="true" id="ph-category-slider-{{ position }}">
+      <div slot="items" class="ph-category-rail">
+        {% for cat in component.categories %}
+          <a href="{{ cat.url }}" class="ph-category-pill swiper-slide">
+            {% if cat.image %}
+              <img src="{{ cat.image|cdn(96,96) }}" alt="{{ cat.name }}" loading="lazy" width="56" height="56">
+            {% endif %}
+            <span>{{ cat.name }}</span>
+          </a>
+        {% endfor %}
+      </div>
+    </salla-slider>
+  {% else %}
+    {# Merchant hasn't picked categories yet in Partners Portal → empty state, not fake data #}
+    <div class="ph-empty-state ph-empty-state--inline">
+      <p>لم يتم اختيار تصنيفات لهذا القسم بعد. أضِفها من إعدادات القالب في لوحة تحكم سلة.</p>
+    </div>
+  {% endif %}
+</section>

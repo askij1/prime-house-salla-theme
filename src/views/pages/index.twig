@@ -1,0 +1,24 @@
+{#
+| Variable   | Type   |
+|------------|--------|
+| page       | object |
+| page.title | string |
+#}
+{% extends "layouts.master" %}
+
+{% block content %}
+  {# The Hero is PRIME HOUSE's fixed brand moment — always present,
+     content editable via theme.settings, not a removable Theme Feature. #}
+  {% component 'home.hero' %}
+
+  {# Every other section (category rail, featured products, trust/store
+     features, testimonials, brand story…) is a Theme Feature or custom
+     Theme Component the merchant enables and reorders from the Salla
+     Partners Portal home page builder. This is the official mechanism —
+     see https://docs.salla.dev/422558m0 #}
+  {% component home %}
+{% endblock %}
+
+{% block scripts %}
+  <script defer src="{{ 'home.js' | asset }}"></script>
+{% endblock %}

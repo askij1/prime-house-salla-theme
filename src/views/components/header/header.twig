@@ -1,0 +1,78 @@
+{# ==========================================================================
+   PRIME HOUSE — Header
+   Registered as {% component 'header.header' %} in layouts/master.twig.
+   Web components used (salla-menu, salla-search, salla-cart-summary,
+   salla-user-menu, salla-localization-modal, salla-contacts) are Twilight's
+   documented components: https://docs.salla.dev/422688m0
+   Logo comes from `store.logo` (set by the merchant in Salla settings —
+   NOT a theme setting), kept at fixed height with object-fit so it is
+   never stretched or distorted, per brand guidance.
+   ========================================================================== #}
+<header data-testid="store-header" class="ph-header">
+
+  {# ---- Top utility bar: language/currency + contacts, hidden on mobile ---- #}
+  <div class="ph-header__top">
+    <div class="container flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
+          <salla-localization-modal data-testid="store-header-localization" show-trigger></salla-localization-modal>
+        {% endif %}
+        {% if store.scope %}
+          <button class="ph-scope-btn" onclick="salla.event.dispatch('scopes::open', {'mode':'default'})">
+            <i class="sicon-location"></i> {{ store.scope.name }}
+          </button>
+        {% endif %}
+      </div>
+      <salla-contacts data-testid="store-header-contacts" is-header></salla-contacts>
+    </div>
+  </div>
+
+  {# ---- Main nav ---- #}
+  <div class="ph-header__main">
+    <div class="container flex items-center justify-between">
+
+      <div class="flex items-center gap-6">
+        <a data-testid="store-header-mobile-toggle" href="#mobile-menu" class="ph-burger lg:hidden" aria-label="فتح القائمة">
+          <i class="sicon-menu"></i>
+        </a>
+
+        <a data-testid="store-header-logo" class="ph-logo" href="{{ store.url }}">
+          <img fetchpriority="high" loading="eager" src="{{ store.logo|cdn(175) }}" alt="{{ store.name }}">
+          {% if is_page('index') %}
+            <h1 class="sr-only">{{ store.name }}</h1>
+          {% else %}
+            <h2 class="sr-only">{{ store.name }}</h2>
+          {% endif %}
+        </a>
+
+        <nav class="ph-nav hidden lg:flex" aria-label="التنقل الرئيسي">
+          {# source="header" = Sources.Header (the default), listing the merchant's
+             configured header navigation links. https://docs.salla.dev/478492m0 #}
+          <salla-menu data-testid="store-header-mainnav" source="header"></salla-menu>
+        </nav>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="ph-header-search hidden md:block">
+          <salla-search data-testid="store-header-search" inline oval height="36"></salla-search>
+        </div>
+        <salla-user-menu data-testid="store-header-user-menu" avatar-only show-header show-trigger></salla-user-menu>
+        <salla-cart-summary data-testid="store-header-cart" class="ph-cart-btn">
+          <i slot="icon" class="sicon-shopping-bag"></i>
+        </salla-cart-summary>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+<aside id="mobile-menu" class="ph-mobile-menu" aria-hidden="true" aria-label="التنقل الرئيسي للجوال">
+  <button type="button" class="ph-mobile-menu__close" aria-label="إغلاق القائمة">
+    <i class="sicon-cancel"></i>
+  </button>
+  <div class="ph-mobile-menu__logo">
+    <img src="{{ store.logo|cdn(160) }}" alt="{{ store.name }}">
+  </div>
+  <salla-menu data-testid="store-header-mobile-menu" source="header"></salla-menu>
+</aside>
+<button type="button" class="ph-mobile-menu__backdrop" aria-label="إغلاق القائمة" tabindex="-1"></button>

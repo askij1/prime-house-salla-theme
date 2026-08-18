@@ -1,0 +1,22 @@
+{#
+  Product options/variants (size, flavor, color…) for supplements/apparel.
+  <salla-product-options> is the official documented web component
+  (docs.salla.dev/422720m0) that renders ALL option types Salla supports
+  (single-option, multi-options, color, image, thumbnail, text, number,
+  date…) from the real `product.options` contract — PRIME HOUSE does not
+  re-implement option rendering, only styles it via CSS variables.
+#}
+{% if product.options|length %}
+  <div class="ph-product__options">
+    <salla-product-options data-testid="store-product-options"
+                            options="{{ product.options }}"
+                            product-id="{{ product.id }}"></salla-product-options>
+  </div>
+{% endif %}
+
+{% if product.weight %}
+  <div class="ph-product__weight">
+    <i class="sicon-luggage-cart"></i>
+    <span>{{ trans('pages.products.weight') }}: {{ product.weight }}</span>
+  </div>
+{% endif %}

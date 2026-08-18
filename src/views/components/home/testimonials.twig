@@ -1,0 +1,27 @@
+{#
+  Theme Feature: "component-testimonials". Grounded in Theme Raed's
+  testimonials.twig — entirely delegated to the official <salla-reviews>
+  web component; PRIME HOUSE only wraps it in our section/container styling.
+
+| Variable           | Type   | Description                          |
+|---------------------|--------|----------------------------------------|
+| limit               | string | Maximum number of testimonials         |
+| type                | string | default: store — all, product, store   |
+| sort                | string |                                         |
+| hide_customer_info  | bool   |                                         |
+| position            | int    |                                         |
+#}
+<section data-testid="store-home-testimonials" class="container ph-section" id="testimonials-{{ position }}">
+  <div class="section-title">
+    <span class="eyebrow">آراء العملاء</span>
+    <h2>ثقة تُبنى بالنتائج</h2>
+    {% if theme.settings.get('glow_signature_enabled', true) %}<div class="glow-line"></div>{% endif %}
+  </div>
+  <salla-reviews
+    {{ display_all_url ? 'display-all-link' : '' }}
+    limit="{{ limit }}"
+    sort="{{ sort }}"
+    {{ hide_customer_info ? 'hide-customer-info' : '' }}
+    type="{{ type }}"
+    class="ph-testimonials"></salla-reviews>
+</section>

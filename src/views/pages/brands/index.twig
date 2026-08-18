@@ -1,0 +1,55 @@
+{#
+| Variable | Type         | Description                                                |
+|----------|--------------|--------------------------------------------------------------|
+| page     | object       |                                                               |
+| brands   | Collection[] | Brands grouped by first letter, ex: {"A":[{name,url,logo}]} |
+#}
+{% extends "layouts.master" %}
+
+{% block content %}
+  <div class="container ph-brands-page">
+    <div class="ph-breadcrumb-wrap">
+      <salla-breadcrumb></salla-breadcrumb>
+    </div>
+
+    <div class="section-title">
+      <h1>{{ page.title }}</h1>
+      {% if theme.settings.get('glow_signature_enabled', true) %}<div class="glow-line"></div>{% endif %}
+    </div>
+
+    {% if brands|length %}
+      <div class="ph-brands-nav">
+        {% for char, group in brands %}
+          <a href="#brand-section-{{ loop.index }}" class="ph-brands-nav__item">{{ char }}</a>
+        {% endfor %}
+      </div>
+
+      {% hook 'brands:index.items.start' %}
+
+      {% for char, group in brands %}
+        <section id="brand-section-{{ loop.index }}" class="ph-brands-group">
+          <div class="ph-brands-group__label"><span>{{ char }}</span></div>
+          <div class="ph-brands-grid">
+            {% for brand in group %}
+              <a data-testid="store-brand-item" href="{{ brand.url }}" class="ph-brand-card">
+                <img src="{{ brand.logo }}" alt="{{ brand.name }}" loading="lazy">
+              </a>
+            {% endfor %}
+          </div>
+        </section>
+      {% endfor %}
+
+      {% hook 'brands:index.items.end' %}
+    {% else %}
+      <div class="ph-empty-state">
+        <i class="sicon-award-ribbon"></i>
+        <h2>{{ trans('pages.brands.non_brands') }}</h2>
+        <p>{{ trans('pages.brands.try_again') }}</p>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script defer src="{{ 'brands.js' | asset }}"></script>
+{% endblock %}
