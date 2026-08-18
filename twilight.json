@@ -1,10 +1,12 @@
 {
-  "name": "Prime House",
+  "name": {
+    "ar": "برايم هاوس",
+    "en": "Prime House"
+  },
   "description": "Premium Fitness & Sports Nutrition digital identity for PRIME HOUSE — a Salla Twilight theme built from the brand's original black/gold storefront identity.",
   "repository": "https://github.com/askij1/prime-house-salla-theme",
   "author_email": "dev@primehouse.sa",
   "support_url": "https://primehouse.sa/support",
-
   "features": [
     "color",
     "fonts",
@@ -14,11 +16,13 @@
     "component-store-features",
     "component-testimonials"
   ],
-
   "components": [
     {
-      "key": "ph-category-rail",
-      "title": { "en": "Category Rail (Glow)", "ar": "شريط الفئات (Glow)" },
+      "key": "9c5fd8d9-23d4-4aa2-a60f-0eb70a071a01",
+      "title": {
+        "en": "Category Rail (Glow)",
+        "ar": "شريط الفئات (Glow)"
+      },
       "icon": "sicon-layout-grid-rearrange",
       "path": "home.category-rail",
       "is_default": true,
@@ -48,8 +52,11 @@
       ]
     },
     {
-      "key": "ph-brand-story",
-      "title": { "en": "Brand Story (Glow Line)", "ar": "قصة العلامة (خط التوهج)" },
+      "key": "ad8d2418-3b8b-4e5e-b215-98af4c1b9a02",
+      "title": {
+        "en": "Brand Story (Glow Line)",
+        "ar": "قصة العلامة (خط التوهج)"
+      },
       "icon": "sicon-star",
       "path": "home.brand-glow",
       "is_default": true,
@@ -75,7 +82,6 @@
       ]
     }
   ],
-
   "settings": [
     {
       "type": "string",
@@ -132,7 +138,7 @@
       "value": "/offers"
     },
     {
-      "type": "image",
+      "type": "string",
       "format": "image",
       "id": "hero_image",
       "label": "صورة الـ Hero (منتج / رياضي)",
