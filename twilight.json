@@ -1,10 +1,8 @@
 {
-  "name": {
-    "ar": "برايم هاوس",
-    "en": "Prime House"
-  },
-  "repository": "https://github.com/askij1/prime-house-salla-theme",
-  "author_email": "dev@primehouse.sa",
+  "version": "1.0.0",
+  "theme_name": "Prime House",
+  "repo_url": "https://github.com/askij1/prime-house-salla-theme",
+  "support_url": "https://primehouse.sa/support",
   "features": [
     "color",
     "fonts",
