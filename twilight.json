@@ -1,14 +1,52 @@
 {
-  "version": "1.0.0",
-  "theme_name": "Prime House",
-  "repo_url": "https://github.com/askij1/prime-house-salla-theme",
-  "support_url": "https://primehouse.sa/support",
+  "name": {
+    "ar": "برايم هاوس",
+    "en": "Prime House"
+  },
+  "repository": "https://github.com/askij1/prime-house-salla-theme",
+  "author_email": "dev@primehouse.sa",
   "features": [
-    "color",
     "fonts",
+    "color",
     "breadcrumb",
+    "component-featured-products",
+    "component-store-features",
+    "component-testimonials",
     "filters"
   ],
-  "settings": [],
-  "components": []
+  "settings": [
+    {
+      "type": "boolean",
+      "label": "الشريط العلوي داكن",
+      "id": "topnav_is_dark",
+      "format": "switch",
+      "required": false,
+      "value": true,
+      "selected": true
+    }
+  ],
+  "components": [
+    {
+      "key": "9c5fd8d9-23d4-4aa2-a60f-0eb70a071a01",
+      "title": {
+        "ar": "شريط الفئات",
+        "en": "Category Rail"
+      },
+      "icon": "sicon-layout-grid-rearrange",
+      "path": "home.category-rail",
+      "is_default": true,
+      "fields": [
+        {
+          "type": "string",
+          "format": "text",
+          "id": "title",
+          "label": "عنوان القسم",
+          "multilanguage": true,
+          "value": null,
+          "required": false,
+          "placeholder": "تسوّق حسب الفئة"
+        }
+      ]
+    }
+  ]
 }
